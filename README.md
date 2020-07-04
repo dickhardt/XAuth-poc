@@ -30,6 +30,4 @@ CLI dynamic client with QR code.
 
 Shows a QR code to scan. Server IP must be available to your mobile, for example on the same network.
 
-## Configuration
-
 
