@@ -1,0 +1,17 @@
+{
+    "id_1": {
+        "name": "XAuth Web App PoC",
+        "uri": "https://github.com/dickhardt/XAuth-poc/wiki/Web-App-Info",
+        "jwks": [
+            {
+                "kty": "EC",
+                "kid": "4D1E-PIJsgIviiRdgUWpio1ECQFb_Cfxfo0PQcVB_lY",
+                "use": "sig",
+                "alg": "ES256",
+                "crv": "P-256",
+                "x": "dM3PPezvIjF6KGZVWQ1irW-70FzDN5IokBAj0LmaO3o",
+                "y": "uIdYHYYK1Nkk9SfV2LhIh-3KJ8u5a-vI2x0vYARTm7Q"
+            }
+        ]
+    }
+}

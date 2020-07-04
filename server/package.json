@@ -1,0 +1,26 @@
+{
+  "name": "xauthserver",
+  "version": "1.0.0",
+  "description": "XAuth GNAP Demo Server",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "clean": "echo \"clean not implemented\" && exit 1"
+  },
+  "author": "Dick Hardt",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "ip": "^1.1.5",
+    "jsonwebtoken": "^8.5.1",
+    "node-jose": "^1.1.4",
+    "nodemon": "^2.0.4",
+    "uuidv4": "^6.1.1"
+  },
+  "nodemonConfig": {
+    "verbose": true,
+    "delay": "0"
+  }
+}

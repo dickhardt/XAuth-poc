@@ -1,0 +1,28 @@
+{
+    "iat": 1,
+    "nonce": 1,
+    "uri": "",
+    "client": {
+        "display": {
+            "name": "CLI PoC",
+            "uri": "https://github.com/dickhardt/XAuth-poc/blob/master/cli-client/README.md"
+        }
+    },
+    "interaction": {
+        "indirect": {
+            "information_uri": "https://github.com/dickhardt/XAuth-poc/blob/master/information.md"
+        }
+    },
+    "authorization": {
+        "type": "oauth_scope",
+        "scope": "read"
+    },
+    "claims": {
+        "oidc": { 
+            "userinfo": {
+                "name": null,
+                "email": null
+            }
+        }
+    }
+}
