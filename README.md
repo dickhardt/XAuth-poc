@@ -7,6 +7,10 @@ Also at [dickhardt/hardt-xauth-protocol](https://github.com/dickhardt/hardt-xaut
 
 [Draft 11 lessons learned](https://github.com/dickhardt/XAuth-poc/wiki/Lessons-Learned---draft-11---initial-version)
 
+## Prequisites
+
+You will need nodejs. A recent version. :)
+
 ## /server
 Grant Server and demo resource server.
 Runs on port 8080 and uses machine IP address so that it can be called from mobile.
