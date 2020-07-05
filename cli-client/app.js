@@ -8,7 +8,7 @@ const fetch = require('node-fetch');
 const fetchHTML = require('fetch-cookie')(fetch);
 const qrcode = require('qrcode-terminal');
 const jose = require('node-jose');
-const { program } = require('commander');
+const { program, opts } = require('commander');
 
 const config = require('../server/config');
 const utils = require('../utils/utils');
@@ -99,6 +99,7 @@ async function  processResponse ( res ) {
                                      key)
                                 .update(grantRequest,"utf8")
                                 .final();
+        // check we can verify                            
         var test = await jose.JWS.createVerify()
                                 .verify(joseBody, { allowEmbeddedKey: true });
         opt = {
@@ -119,12 +120,31 @@ async function  processResponse ( res ) {
     if (program.fake)
         fakeUser( json.interaction.indirect.indirect_uri );
 
-    response = await fetch(json.uri, {headers:{'Accept':'application/json'}});
+    // read grant        
+    if (program.none) {
+        opt = {headers:{'Accept':'application/json'}};
+    } else {
+        opt = {
+            iat: utils.now(),
+            nonce: uuid(),
+            uri: json.uri,
+            method: 'GET'
+        };
+        var joseHeader = await jose.JWS.createSign( {format:'compact'}, key)
+            .update(JSON.stringify(opt),"utf8")
+            .final();
+        opt.headers = {
+            'Accept':'application/json',
+            'Authorization:': 'jose '+ joseHeader
+         }
+    }
+
+    response = await fetch(json.uri, opts);
 
     json = await processResponse(response);
+    var azURI = json.authorization.uri;
 
-
-    if (!json.authorization || json.authorization.token)
+    if (!json.authorization || !json.authorization.token)
         return;
 
     // fetch resource w/ access token
@@ -134,5 +154,42 @@ async function  processResponse ( res ) {
                                 'Content-Type': 'application/json'
                             } });
     json = await processResponse(response);
+
+    // refresh token        
+    if (program.none) {
+        opt = {headers:{'Accept':'application/json'}};
+    } else {
+        opt = {
+            iat: utils.now(),
+            nonce: uuid(),
+            uri: azURI,
+            method: 'GET'
+        };
+        var joseHeader = await jose.JWS.createSign( {format:'compact'}, key)
+            .update(JSON.stringify(opt),"utf8")
+            .final();
+        opt.headers = {
+            'Accept':'application/json',
+            'Authorization:': 'jose '+ joseHeader
+         }
+    }
+
+    response = await fetch(azURI, opts);
+
+    json = await processResponse(response);
+
+
+    if (!json.authorization || !json.authorization.token)
+        return;
+
+    // fetch resource w/ access token
+    response = await fetch(config.resource.uri,
+                            { headers: {
+                                'Authorization': 'bearer '+ json.authorization.token,
+                                'Content-Type': 'application/json'
+                            } });
+    json = await processResponse(response);
+    
+
 
 })();

@@ -29,8 +29,8 @@ exports.fetch = ( req, res, next ) => {
     var clientObj = {};
     if (req.gnap?.grant?.context?.client)
         client = req.gnap.grant.context.client;
-    if (req.gnap?.az?.context?.client)
-        client = req.gnap.az.context.client;    
+    if (req.gnap?.az?.client)
+        client = req.gnap.az.client;    
     if (!client) {
         if (req.gnap.auth.none)
             client = req?.body?.client;

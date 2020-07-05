@@ -28,7 +28,7 @@ function refreshAZ ( id, access ) {
     if (!access)
         access = authorizationDB.read(id);
     let az = {
-        uri: config.gs.uri + '/authorization/' + id,
+        uri: config.gs.uri + '/az/' + id,
         expires_in: 3600,
         mechanism: 'bearer',
         access: {
