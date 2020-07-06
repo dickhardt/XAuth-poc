@@ -29,8 +29,6 @@ if (config.gs?.auth?.required)
     router.use(auth.confirm);
 router.post(    '/', grant.create);
 
-// TODO -- NOT getting to these routes
-
 router.get(     '/grant/:grant', grant.read);
 router.put(     '/grant/:grant', grant.update);
 router.patch(   '/grant/:grant', grant.verify);
