@@ -66,7 +66,8 @@ async function  processResponse ( res ) {
         interaction: {
             indirect: {
                 information_uri: "https://github.com/dickhardt/XAuth-poc/wiki/CLI-App"
-            }
+            },
+            unknown_mode: 'this should generate a warning response'
         },
         authorization: {
             type: "oauth_scope",

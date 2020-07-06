@@ -109,6 +109,8 @@ exports.create = (req, res, next) => {
 
     if (err = client.response(grant, response))return next(err);
     if (err = interaction.response(grant, response)) return next(err);
+    if (grant.warnings)
+        response.warnings = grant.warnings;
 
     res.status(201).json( response )
 }
