@@ -7,7 +7,7 @@ const DB = require('./data/fakeDB');
 const client = require('./client');
 const user = require('./user');
 const claims = require('./claims');
-const authorization = require('./authorization');
+const authorizations = require('./authorizations');
 const interaction = require('./interaction');
 const utils = require('../utils/utils')
 const error = require('./error');
@@ -20,9 +20,22 @@ const makeGrantURI = ( grantID ) => {
     return config.gs.uri + '/grant/' + grantID;    
 }
 
+const checkScope = ( a, scope ) => {
+    if (a.type) {
+        return a.scope[scope]
+    } else {
+        var check = false;
+        Object.values(a).forEach( item => { 
+            if (item.scope[scope])
+                check = true;
+        })
+        return check;
+    }
+}
+
 const checkPolicy = ( grant ) => {
     // indirect interaction not allowed if write scope requested
-    if (grant.context.authorization.scope.write ) {
+    if (checkScope( grant.context.authorizations, 'write')) {
         grant.verification = uuid();
         if (grant.context.interaction.indirect) {
             delete grant.context.interaction.indirect;
@@ -48,7 +61,7 @@ exports.complete = ( grantID, userID, authorized ) => {
         // client.complete(grant, userID);
         // user.complete(grant, userID);
         claims.complete(grant, userID);
-        authorization.complete(grant, userID);
+        authorizations.complete(grant, userID);
     }
     grant.complete = true;
     return grantDB.update(grantID,grant);
@@ -81,7 +94,7 @@ exports.create = (req, res, next) => {
                     client: req.gnap.client.context,
                     user: {},
                     interaction: {},
-                    authorization: {},
+                    authorizations: {},
                     claims: {}
                 },
                 complete: false
@@ -89,7 +102,7 @@ exports.create = (req, res, next) => {
 
     if (err = user.validate( grant )) return next(err);
     if (err = interaction.validate( grant )) return next(err);
-    if (err = authorization.validate( grant )) return next(err);
+    if (err = authorizations.validate( grant )) return next(err);
     if (err = claims.validate( grant )) return next(err);
 
     if (err = checkPolicy( grant )) return next(err);
@@ -136,7 +149,7 @@ exports.read = (req, res, next) => {
         if (err = client.response(grant, response))return next(err);
         if (err = user.response(grant, response))return next(err);
         if (err = claims.response(grant, response))return next(err);
-        if (err = authorization.response(grant, response))return next(err);
+        if (err = authorizations.response(grant, response))return next(err);
         console.log(`... grant ${grantID} authorized.`);
         return res.json(response);
     }

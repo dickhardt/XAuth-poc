@@ -6,7 +6,7 @@
 const express = require('express');
 
 const grant = require('./grant');
-const az = require('./authorization');
+const az = require('./authorizations');
 const auth = require('./authentication');
 const options = require('./options');
 const client = require('./client');

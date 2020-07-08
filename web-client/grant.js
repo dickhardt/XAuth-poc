@@ -29,9 +29,15 @@ exports.create = function ( req, res, next ) {
             id: 'id_1'
         },
         interaction: { redirect: { completion_uri: null } },
-        authorization: {
-            type: "oauth_scope",
-            scope: "read write"
+        authorizations: {
+            reader: {
+                type: "oauth_scope",
+                scope: "read"
+            },
+            writer: {
+                type: "oauth_scope",
+                scope: "write"
+            }
         },
         claims: {
             oidc: { 
@@ -109,9 +115,11 @@ exports.complete = function ( req, res, next ) {
         if (!json?.claims?.oidc?.userinfo)
             return next(new Error(JSON.stringify(json)))
         // TODO check the response matches the request
+        console.log( json );
+
         completionDB.delete(completionID);
         sessionObj.user = json.claims.oidc.userinfo;
-        sessionObj.authorization = json.authorization;
+        sessionObj.authorizations = json.authorizations;
         sessionDB.update(sessionID, sessionObj);
         res.redirect('/')
     });

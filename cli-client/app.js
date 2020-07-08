@@ -69,7 +69,7 @@ async function  processResponse ( res ) {
             },
             unknown_mode: 'this should generate a warning response'
         },
-        authorization: {
+        authorizations: {
             type: "oauth_scope",
             scope: "read"
         },
@@ -143,15 +143,17 @@ async function  processResponse ( res ) {
     response = await fetch(json.uri, opts);
 
     json = await processResponse(response);
-    var azURI = json.authorization.uri;
 
-    if (!json.authorization || !json.authorization.token)
-        return;
+    if (!json.authorizations || !json.authorizations.token)
+        return console.error('did not get authorizations');
+
+        var azURI = json.authorizations.uri;
+
 
     // fetch resource w/ access token
     response = await fetch(config.resource.uri,
                             { headers: {
-                                'Authorization': 'bearer '+ json.authorization.token,
+                                'Authorization': 'bearer '+ json.authorizations.token,
                                 'Content-Type': 'application/json'
                             } });
     json = await processResponse(response);
@@ -180,13 +182,13 @@ async function  processResponse ( res ) {
     json = await processResponse(response);
 
 
-    if (!json.authorization || !json.authorization.token)
-        return;
+    if (!json.authorizations || !json.authorizations.token)
+        return console.error('did not get authorizations');
 
     // fetch resource w/ access token
     response = await fetch(config.resource.uri,
                             { headers: {
-                                'Authorization': 'bearer '+ json.authorization.token,
+                                'Authorization': 'bearer '+ json.authorizations.token,
                                 'Content-Type': 'application/json'
                             } });
     json = await processResponse(response);
