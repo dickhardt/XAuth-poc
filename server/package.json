@@ -14,7 +14,7 @@
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
     "ip": "^1.1.5",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "node-jose": "^1.1.4",
     "nodemon": "^2.0.4",
     "uuidv4": "^6.1.1"
